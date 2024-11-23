@@ -23,6 +23,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # my apps
+    'quiz',
+    'results',
+    'users',
+
+    # install apps
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
@@ -36,7 +44,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'root.urls'
-
+AUTH_USER_MODEL = 'users.User'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
