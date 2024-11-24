@@ -68,6 +68,10 @@ class User(AbstractUser):
         }
         return data
 
+    class Meta:
+        verbose_name = "User"
+        verbose_name_plural = "Users"
+
 
 class UserConfirmation(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='codes')
