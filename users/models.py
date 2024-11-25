@@ -26,7 +26,7 @@ class User(AbstractUser):
         PRO = '3', 'Pro'
 
     email = models.EmailField(unique=True)
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     avatar = models.ImageField(
         upload_to='user/', blank=True, null=True,
