@@ -11,7 +11,10 @@ class Achievement(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     points = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.name
@@ -25,6 +28,11 @@ class User(AbstractUser):
         INTERMEDIATE = '2', 'Intermediate'
         PRO = '3', 'Pro'
 
+    class RolesTypes(models.TextChoices):
+        ADMIN = '1', 'Administrator'
+        USERS = '2', 'Users'
+        SUPPORT = '3', 'Support'
+
     email = models.EmailField(unique=True)
     date_of_birth = models.DateField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
@@ -32,7 +40,8 @@ class User(AbstractUser):
         upload_to='user/', blank=True, null=True,
         validators=[FileExtensionValidator(['jpg', 'jpeg', 'png'])]
     )
-    levels = models.CharField(max_length=255, choices=LevelsTypes.choices, default=LevelsTypes.BEGINNER)
+    levels = models.CharField(max_length=25, choices=LevelsTypes.choices, default=LevelsTypes.BEGINNER)
+    roles = models.CharField(max_length=25, choices=RolesTypes.choices, default=RolesTypes.USERS)
     is_verified = models.BooleanField(default=False)
     ball = models.IntegerField(default=0)
     achievement = models.ManyToManyField(Achievement, blank=True, related_name='users')
@@ -53,10 +62,10 @@ class User(AbstractUser):
             self.levels = self.LevelsTypes.PRO
 
     def create_code(self):
-        code = "".join([str(random.randint(0, 9)) for _ in range(4)])
+        code = "".join([str(random.randint(1, 9)) for _ in range(4)])
         UserConfirmation.objects.create(
             code=code,
-            user=self.id
+            user_id=self.id
         )
         return code
 
@@ -64,7 +73,7 @@ class User(AbstractUser):
         refresh = RefreshToken.for_user(self)
         data = {
             "refresh_token": str(refresh),
-            "access": str(refresh.access_token)
+            "access_token": str(refresh.access_token)
         }
         return data
 
