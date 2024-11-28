@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView, status
 from .serializers import (
-    UserCreateSerializer, UserCodeSerializer,
+    UserCreateSerializer, UserCodeSerializer, UserLoginSerializer,
 )
 from drf_spectacular.utils import extend_schema
 
@@ -63,4 +63,13 @@ class UserCodeVerifyAPIView(APIView):
         user.save()
         return user
 
+class UserLoginAPIView(APIView):
+
+    @extend_schema(request=UserLoginSerializer)
+    def post(self, request):
+        serializer = UserLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

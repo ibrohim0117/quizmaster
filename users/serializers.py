@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, Serializer
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.models import User
 
@@ -26,5 +28,25 @@ class UserCreateSerializer(ModelSerializer):
 
 class UserCodeSerializer(Serializer):
     code = serializers.CharField(write_only=True, max_length=4)
+
+
+class UserLoginSerializer(Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        username = attrs.get('username')
+        password = attrs.get('password')
+        user = authenticate(username=username, password=password)
+        if user and user.is_verified:
+            token = RefreshToken.for_user(user)
+            data = {
+                'username': username,
+                'access_token': str(token.access_token),
+                'refresh_token': str(token)
+            }
+            return data
+        else:
+            raise serializers.ValidationError('Username hato yoki user tasdiqlanmagan')
 
 
