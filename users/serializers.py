@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Serializer
 
 from users.models import User
 
@@ -22,5 +22,9 @@ class UserCreateSerializer(ModelSerializer):
         user.create_code()
         return user
 
+
+
+class UserCodeSerializer(Serializer):
+    code = serializers.CharField(write_only=True, max_length=4)
 
 
