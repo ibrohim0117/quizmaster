@@ -13,6 +13,9 @@ class BaseCreatedModel(models.Model):
 class Science(BaseCreatedModel):
     name = models.CharField(max_length=100, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Quiz(BaseCreatedModel):
     class DegreeType(models.TextChoices):
@@ -25,10 +28,16 @@ class Quiz(BaseCreatedModel):
     degree = models.CharField(max_length=5, choices=DegreeType.choices, default=DegreeType.EASY)
     science = models.ForeignKey(Science, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 
 class Question(BaseCreatedModel):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.TextField()
+
+    def __str__(self):
+        return self.question
 
 
 class Answer(BaseCreatedModel):
@@ -44,3 +53,6 @@ class Answer(BaseCreatedModel):
                 name='bitta_savolga_ikki_javob'
             )
         ]
+
+    def __str__(self):
+        return self.answer
