@@ -13,6 +13,10 @@ class BaseCreatedModel(models.Model):
 class Science(BaseCreatedModel):
     name = models.CharField(max_length=100, unique=True)
 
+    class Meta:
+        verbose_name_plural = 'Fanlar'
+        verbose_name = 'Fan'
+
     def __str__(self):
         return self.name
 
@@ -28,6 +32,10 @@ class Quiz(BaseCreatedModel):
     degree = models.CharField(max_length=5, choices=DegreeType.choices, default=DegreeType.EASY)
     science = models.ForeignKey(Science, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name_plural = 'Tests'
+        verbose_name = 'Test'
+
     def __str__(self):
         return self.name
 
@@ -35,6 +43,10 @@ class Quiz(BaseCreatedModel):
 class Question(BaseCreatedModel):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.TextField()
+
+    class Meta:
+        verbose_name_plural = 'Savollar'
+        verbose_name = 'Savol'
 
     def __str__(self):
         return self.question
@@ -53,6 +65,8 @@ class Answer(BaseCreatedModel):
                 name='bitta_savolga_ikki_javob'
             )
         ]
+        verbose_name_plural = 'Variantlar'
+        verbose_name = 'Variant'
 
     def __str__(self):
         return self.answer
