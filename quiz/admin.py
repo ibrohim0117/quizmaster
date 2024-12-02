@@ -9,10 +9,19 @@ from quiz.models import Quiz, Question, Answer, Science
 # admin.site.register(Answer)
 # admin.site.register(Science)
 
+class QuestionStackedInline(admin.StackedInline):
+    model = Question
+    extra = 1
+
+class AnswerStackedInline(admin.StackedInline):
+    model = Answer
+    extra = 4
+
 @admin.register(Quiz)
 class QuizAdmin(admin.ModelAdmin):
     list_display = ['name', 'degree', 'science']
     search_fields = ['degree', 'science__quiz__name']
+    inlines = [QuestionStackedInline, ]
 
 
 @admin.register(Science)
@@ -24,6 +33,7 @@ class ScienceAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ['question', 'quiz']
     search_fields = ['question']
+    inlines = [AnswerStackedInline, ]
 
 
 @admin.register(Answer)
