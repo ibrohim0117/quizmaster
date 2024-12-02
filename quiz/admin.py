@@ -9,13 +9,16 @@ from quiz.models import Quiz, Question, Answer, Science
 # admin.site.register(Answer)
 # admin.site.register(Science)
 
-class QuestionStackedInline(admin.StackedInline):
-    model = Question
-    extra = 1
-
 class AnswerStackedInline(admin.StackedInline):
     model = Answer
     extra = 4
+
+
+class QuestionStackedInline(admin.StackedInline):
+    model = Question
+    extra = 1
+    show_change_link = True
+
 
 @admin.register(Quiz)
 class QuizAdmin(admin.ModelAdmin):
@@ -39,5 +42,6 @@ class QuestionAdmin(admin.ModelAdmin):
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ['answer', 'question', 'is_true']
+    search_fields = ['is_true']
 
 
