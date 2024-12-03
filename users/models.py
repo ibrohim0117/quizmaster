@@ -1,7 +1,7 @@
 from datetime import timezone, timedelta
 import random
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -12,6 +12,7 @@ class Achievement(models.Model):
     description = models.TextField(blank=True, null=True)
     points = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
+    sales = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
