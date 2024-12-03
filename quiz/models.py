@@ -39,9 +39,13 @@ class Quiz(BaseCreatedModel):
     def __str__(self):
         return self.name
 
+    @property
+    def count_questions(self):
+        return Question.objects.filter(quiz=self).count()
+
 
 class Question(BaseCreatedModel):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
     question = models.TextField()
 
     class Meta:
@@ -53,7 +57,7 @@ class Question(BaseCreatedModel):
 
 
 class Answer(BaseCreatedModel):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
     answer = models.TextField()
     is_true = models.BooleanField(default=False)
 

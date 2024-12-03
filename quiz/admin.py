@@ -22,7 +22,7 @@ class QuestionStackedInline(admin.StackedInline):
 
 @admin.register(Quiz)
 class QuizAdmin(admin.ModelAdmin):
-    list_display = ['name', 'degree', 'science']
+    list_display = ['name', 'degree', 'science', 'count_questions']
     search_fields = ['degree', 'science__quiz__name']
     inlines = [QuestionStackedInline, ]
 

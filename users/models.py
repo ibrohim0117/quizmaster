@@ -16,6 +16,10 @@ class Achievement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name_plural = "Sovg'alar"
+        verbose_name = "Sovg'a"
+
 
     def __str__(self):
         return self.name
