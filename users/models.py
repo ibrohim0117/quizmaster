@@ -5,6 +5,7 @@ from django.core.validators import FileExtensionValidator, MinValueValidator, Ma
 from django.db import models
 from django.utils import timezone
 from rest_framework_simplejwt.tokens import RefreshToken
+# from .tasks import task_send_mail
 
 
 class Achievement(models.Model):
@@ -68,6 +69,7 @@ class User(AbstractUser):
 
     def create_code(self):
         code = "".join([str(random.randint(1, 9)) for _ in range(4)])
+        # task_send_mail(self.email, code)
         UserConfirmation.objects.create(
             code=code,
             user_id=self.id
