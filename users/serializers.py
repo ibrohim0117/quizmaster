@@ -56,3 +56,5 @@ class UserListSerializer(ModelSerializer):
         fields = ('id', 'username', 'email', 'roles', 'levels')
 
 
+
+
