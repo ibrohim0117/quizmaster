@@ -50,3 +50,9 @@ class UserLoginSerializer(Serializer):
             raise serializers.ValidationError('Username hato yoki user tasdiqlanmagan')
 
 
+class UserListSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'roles', 'levels')
+
+

@@ -1,10 +1,13 @@
+from rest_framework.generics import ListAPIView
 from rest_framework.validators import ValidationError
 from django.utils import timezone
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView, status
+
+from .models import User
 from .serializers import (
-    UserCreateSerializer, UserCodeSerializer, UserLoginSerializer,
+    UserCreateSerializer, UserCodeSerializer, UserLoginSerializer, UserListSerializer,
 )
 from drf_spectacular.utils import extend_schema
 
@@ -72,4 +75,9 @@ class UserLoginAPIView(APIView):
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserListApiView(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserListSerializer
 
