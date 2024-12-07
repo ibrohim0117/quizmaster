@@ -1,16 +1,16 @@
 from django.contrib import admin
 
-from quiz.models import Quiz, Question, Answer, Science
+from quiz.models import Quiz, Question, Option, Science
 
 # Register your models here.
 
 # admin.site.register(Quiz)
 # admin.site.register(Question)
-# admin.site.register(Answer)
+# admin.site.register(Option)
 # admin.site.register(Science)
 
-class AnswerStackedInline(admin.StackedInline):
-    model = Answer
+class OptionStackedInline(admin.StackedInline):
+    model = Option
     extra = 4
 
 
@@ -36,12 +36,12 @@ class ScienceAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ['question', 'quiz']
     search_fields = ['question']
-    inlines = [AnswerStackedInline, ]
+    inlines = [OptionStackedInline, ]
 
 
-@admin.register(Answer)
-class AnswerAdmin(admin.ModelAdmin):
-    list_display = ['answer', 'question', 'is_true']
+@admin.register(Option)
+class OptionAdmin(admin.ModelAdmin):
+    list_display = ['option', 'question', 'is_true']
     search_fields = ['is_true']
 
 

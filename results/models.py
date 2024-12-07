@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
-from quiz.models import Quiz, Question, Answer
+from quiz.models import Quiz, Question, Option
 
 class Result(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='results')
@@ -16,7 +16,7 @@ class Result(models.Model):
         ordering = ['-end_time']
 
     def __str__(self):
-        return f"{self.user.username} - {self.quiz.name} - {self.ball}/{self.total_questions}"
+        return f"{self.user.username}"
 
     @property
     def test_time(self):
@@ -27,3 +27,5 @@ class Result(models.Model):
     @property
     def total_questions(self):
         return self.quiz.questions.count()
+
+

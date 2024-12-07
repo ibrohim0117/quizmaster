@@ -5,5 +5,5 @@ from results.models import Result
 
 @admin.register(Result)
 class ResultAdmin(admin.ModelAdmin):
-    list_display = ['user', 'quiz', 'ball', 'total_questions']
+    list_display = ['user', 'quiz', 'ball', 'total_questions', 'test_time']
 

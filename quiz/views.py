@@ -5,10 +5,10 @@ from rest_framework.generics import (
     DestroyAPIView
 )
 
-from .models import Science, Quiz, Answer, Question
+from .models import Science, Quiz, Option, Question
 from .serializers import (
     ScienceSerializer, QuizSerializer,
-    QuestionSerializer, AnswerSerializer
+    QuestionSerializer, OptionSerializer
 )
 
 
@@ -26,8 +26,8 @@ class QuestionListAPIView(ListAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
-class AnswerListAPIView(ListAPIView):
-    queryset = Answer.objects.all()
-    serializer_class = AnswerSerializer
+class OptionListAPIView(ListAPIView):
+    queryset = Option.objects.all()
+    serializer_class = OptionSerializer
 
 

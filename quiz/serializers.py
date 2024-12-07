@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, Serializer
-from quiz.models import Quiz, Question, Answer, Science
+from quiz.models import Quiz, Question, Option, Science
 
 
 
@@ -21,7 +21,7 @@ class QuestionSerializer(ModelSerializer):
         fields = ['id', 'question', 'quiz']
 
 
-class AnswerSerializer(ModelSerializer):
+class OptionSerializer(ModelSerializer):
     class Meta:
-        model = Answer
+        model = Option
         fields = ['id', 'question', 'answer', 'is_true']

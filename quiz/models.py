@@ -56,9 +56,9 @@ class Question(BaseCreatedModel):
         return self.question
 
 
-class Answer(BaseCreatedModel):
+class Option(BaseCreatedModel):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
-    answer = models.TextField()
+    option = models.TextField()
     is_true = models.BooleanField(default=False)
 
     class Meta:
@@ -73,4 +73,6 @@ class Answer(BaseCreatedModel):
         verbose_name = 'Variant'
 
     def __str__(self):
-        return self.answer
+        return self.option
+
+
