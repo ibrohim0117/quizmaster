@@ -29,3 +29,13 @@ class Result(models.Model):
         return self.quiz.questions.count()
 
 
+class Answer(models.Model):
+    result = models.ForeignKey(Result, on_delete=models.CASCADE, related_name='answers')
+    question = models.ForeignKey('quiz.Question', on_delete=models.CASCADE, related_name='answers_result')
+    selected_option = models.ForeignKey('quiz.Option', on_delete=models.CASCADE)
+    is_correct = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Javob"
+        verbose_name_plural = "Javoblar"
+
