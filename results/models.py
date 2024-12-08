@@ -16,7 +16,7 @@ class Result(models.Model):
         ordering = ['-end_time']
 
     def __str__(self):
-        return f"{self.user.username}"
+        return f"{self.user.username} - {self.quiz.name}"
 
     @property
     def test_time(self):
