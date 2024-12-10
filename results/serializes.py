@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Quiz, Question, Option
+from .models import Quiz, Question, Option, Result
 
 class OptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,3 +21,29 @@ class QuizSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quiz
         fields = ['id', 'name', 'questions']
+
+
+
+class AnswerSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField()
+    selected_option_id = serializers.IntegerField()
+
+
+class SubmitQuizSerializer(serializers.Serializer):
+    quiz_id = serializers.IntegerField()
+    answers = AnswerSerializer(many=True)
+
+
+class ResultSerializer(serializers.ModelSerializer):
+    total_correct = serializers.SerializerMethodField()
+    total_questions = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Result
+        fields = ['quiz', 'ball', 'total_correct', 'total_questions']
+
+    def get_total_correct(self, obj):
+        return obj.ball
+
+    def get_total_questions(self, obj):
+        return obj.quiz.questions.count()
