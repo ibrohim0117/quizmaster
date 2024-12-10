@@ -57,7 +57,7 @@ class Question(BaseCreatedModel):
 
 
 class Option(BaseCreatedModel):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
     option = models.TextField()
     is_true = models.BooleanField(default=False)
 
