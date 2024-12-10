@@ -12,13 +12,13 @@ class ScienceSerializer(ModelSerializer):
 class QuizSerializer(ModelSerializer):
     class Meta:
         model = Quiz
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'degree', 'questions']
 
 
 class QuestionSerializer(ModelSerializer):
     class Meta:
         model = Question
-        fields = ['id', 'question', 'quiz']
+        fields = ['id', 'question', 'quiz', 'answers']
 
 
 class OptionSerializer(ModelSerializer):
