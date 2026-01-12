@@ -7,7 +7,8 @@ from rest_framework.views import APIView, status
 
 from .models import User
 from .serializers import (
-    UserCreateSerializer, UserCodeSerializer, UserLoginSerializer, UserListSerializer,
+    UserCreateSerializer, UserCodeSerializer, UserLoginSerializer, 
+    UserListSerializer, UserRatingSerializer, UserProfileSerializer
 )
 from drf_spectacular.utils import extend_schema
 
@@ -80,4 +81,30 @@ class UserLoginAPIView(APIView):
 class UserListApiView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+
+
+class RatingListView(ListAPIView):
+    """Platforma bo'yicha reyting ro'yxati"""
+    permission_classes = (AllowAny,)
+    serializer_class = UserRatingSerializer
+    
+    def get_queryset(self):
+        # Ball bo'yicha tartiblangan foydalanuvchilar
+        users = User.objects.filter(is_active=True).order_by('-ball', 'id')
+        # Har bir foydalanuvchiga rank qo'shamiz
+        result = []
+        for rank, user in enumerate(users, start=1):
+            user.rank = rank
+            result.append(user)
+        return result
+
+
+class UserProfileView(APIView):
+    """Foydalanuvchi profili va reytingi"""
+    permission_classes = (IsAuthenticated,)
+    
+    def get(self, request):
+        user = request.user
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 

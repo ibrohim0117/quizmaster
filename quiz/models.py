@@ -22,19 +22,21 @@ class Science(BaseCreatedModel):
 
 
 class Quiz(BaseCreatedModel):
+    """Test/Mavzu modeli - Test va Mavzular birlashtirilgan"""
     class DegreeType(models.TextChoices):
         EASY = '1', 'Easy'
         MEDIUM = '2', 'Medium'
         HARD = '3', 'Hard'
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=200, help_text="Test yoki mavzu nomi")
     description = models.TextField(blank=True, null=True)
     degree = models.CharField(max_length=5, choices=DegreeType.choices, default=DegreeType.EASY)
-    science = models.ForeignKey(Science, on_delete=models.CASCADE)
+    science = models.ForeignKey(Science, on_delete=models.CASCADE, related_name='quizzes')
 
     class Meta:
-        verbose_name_plural = 'Tests'
-        verbose_name = 'Test'
+        verbose_name_plural = 'Testlar/Mavzular'
+        verbose_name = 'Test/Mavzu'
+        unique_together = ['name', 'science', 'degree']
 
     def __str__(self):
         return self.name

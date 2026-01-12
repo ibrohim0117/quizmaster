@@ -1,11 +1,41 @@
 from datetime import timezone, timedelta
 import random
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import FileExtensionValidator, MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 from rest_framework_simplejwt.tokens import RefreshToken
 # from .tasks import task_send_mail
+
+
+class UserManager(BaseUserManager):
+    """Custom User Manager for email-based authentication"""
+    
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('Email majburiy maydon')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_verified', True)
+        extra_fields.setdefault('is_active', True)
+        
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser is_staff=True bo\'lishi kerak')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser is_superuser=True bo\'lishi kerak')
+        
+        # username ni email bilan to'ldiramiz
+        if not extra_fields.get('username'):
+            extra_fields['username'] = email
+        
+        return self.create_user(email, password, **extra_fields)
 
 
 class Achievement(models.Model):
@@ -29,6 +59,8 @@ class Achievement(models.Model):
 class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    
+    objects = UserManager()
 
     class LevelsTypes(models.TextChoices):
         BEGINNER = '0', 'Beginner'

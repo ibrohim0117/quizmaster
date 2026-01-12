@@ -72,5 +72,34 @@ class UserListSerializer(ModelSerializer):
         fields = ('id', 'email', 'roles', 'levels', 'ball')
 
 
+class UserRatingSerializer(ModelSerializer):
+    """Reyting ro'yxati uchun serializer"""
+    rank = serializers.IntegerField(read_only=True)
+    
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'ball', 'levels', 'rank')
 
 
+class UserProfileSerializer(ModelSerializer):
+    """Foydalanuvchi profili uchun serializer"""
+    rank = serializers.SerializerMethodField()
+    total_tests = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'ball', 'levels', 'rank', 'total_tests', 'is_verified', 'created_at')
+    
+    def get_rank(self, obj):
+        """Foydalanuvchining reytingdagi o'rni"""
+        users = User.objects.filter(is_active=True).order_by('-ball', 'id')
+        rank = 1
+        for user in users:
+            if user.id == obj.id:
+                return rank
+            rank += 1
+        return None
+    
+    def get_total_tests(self, obj):
+        """Foydalanuvchi ishlagan testlar soni"""
+        return obj.results.count()
