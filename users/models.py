@@ -27,6 +27,8 @@ class Achievement(models.Model):
 
 
 class User(AbstractUser):
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     class LevelsTypes(models.TextChoices):
         BEGINNER = '0', 'Beginner'
@@ -39,6 +41,7 @@ class User(AbstractUser):
         USERS = '2', 'Users'
         SUPPORT = '3', 'Support'
 
+    username = models.CharField(max_length=150, blank=True, null=True, unique=False)
     email = models.EmailField(unique=True)
     date_of_birth = models.DateField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
@@ -89,10 +92,14 @@ class User(AbstractUser):
         verbose_name_plural = "Users"
 
 
+def get_expiration_time():
+    return timezone.now() + timedelta(minutes=10)
+
+
 class UserConfirmation(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='codes')
     code = models.CharField(max_length=4)
-    expiration_time = models.DateTimeField(default=timezone.now() + timedelta(minutes=10))
+    expiration_time = models.DateTimeField(default=get_expiration_time)
     is_confirmed = models.BooleanField(default=False)
 
     def __str__(self):

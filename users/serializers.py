@@ -9,18 +9,26 @@ from users.models import User
 class UserCreateSerializer(ModelSerializer):
     levels = serializers.CharField(read_only=True)
     roles = serializers.CharField(read_only=True)
+    password = serializers.CharField(write_only=True, min_length=8)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'levels', 'roles')
+        fields = ('email', 'password', 'levels', 'roles')
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Bu email allaqachon ro'yxatdan o'tgan")
+        return value
 
     def create(self, validated_data):
-        user = User.objects.create(
-            username=validated_data.get('username'),
-            email=validated_data.get('email'),
+        email = validated_data.get('email')
+        password = validated_data.get('password')
+        
+        user = User.objects.create_user(
+            email=email,
+            password=password,
+            username=email  # username ni email bilan to'ldiramiz
         )
-        user.set_password(validated_data.get('password'))
-        user.save()
         user.create_code()
         return user
 
@@ -31,29 +39,37 @@ class UserCodeSerializer(Serializer):
 
 
 class UserLoginSerializer(Serializer):
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True, write_only=True)
 
     def validate(self, attrs):
-        username = attrs.get('username')
+        email = attrs.get('email')
         password = attrs.get('password')
-        user = authenticate(username=username, password=password)
-        if user and user.is_verified:
-            token = RefreshToken.for_user(user)
-            data = {
-                'username': username,
-                'access_token': str(token.access_token),
-                'refresh_token': str(token)
-            }
-            return data
-        else:
-            raise serializers.ValidationError('Username hato yoki user tasdiqlanmagan')
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError('Email yoki parol noto\'g\'ri')
+        
+        if not user.check_password(password):
+            raise serializers.ValidationError('Email yoki parol noto\'g\'ri')
+        
+        if not user.is_verified:
+            raise serializers.ValidationError('Foydalanuvchi tasdiqlanmagan. Iltimos, email orqali kodni tasdiqlang.')
+        
+        token = RefreshToken.for_user(user)
+        data = {
+            'email': user.email,
+            'access_token': str(token.access_token),
+            'refresh_token': str(token)
+        }
+        return data
 
 
 class UserListSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'roles', 'levels')
+        fields = ('id', 'email', 'roles', 'levels', 'ball')
 
 
 

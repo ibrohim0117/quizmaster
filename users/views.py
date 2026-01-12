@@ -20,8 +20,8 @@ class RegisterAPIView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             data = {
-                'username': user.username,
                 'email': user.email,
+                'message': 'Ro\'yxatdan o\'tdingiz. Email orqali kod yuborildi.',
                 'access_token': user.token()['access_token'],
                 'refresh_token': user.token()['refresh_token'],
             }

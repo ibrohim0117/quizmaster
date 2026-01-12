@@ -15,6 +15,6 @@ class UserConfirmationAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'levels', 'roles', 'is_verified', 'is_superuser', 'ball', 'id']
-    search_fields = ['username', ]
+    list_display = ['email', 'levels', 'roles', 'is_verified', 'is_superuser', 'ball', 'id']
+    search_fields = ['email', ]
 
