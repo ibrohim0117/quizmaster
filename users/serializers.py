@@ -88,7 +88,8 @@ class UserProfileSerializer(ModelSerializer):
     
     class Meta:
         model = User
-        fields = ('id', 'email', 'ball', 'levels', 'rank', 'total_tests', 'is_verified', 'created_at')
+        # fields = ('id', 'email', 'ball', 'levels', 'rank', 'total_tests', 'is_verified', 'created_at')
+        fields = '__all__'
     
     def get_rank(self, obj):
         """Foydalanuvchining reytingdagi o'rni"""

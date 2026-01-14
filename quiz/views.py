@@ -18,7 +18,6 @@ class ScienceListAPIView(ListAPIView):
 
 
 class QuizListAPIView(ListAPIView):
-    """Testlar/Mavzular ro'yxati - Test va Mavzular birlashtirilgan"""
     queryset = Quiz.objects.select_related('science').all()
     serializer_class = QuizSerializer
     filter_backends = (DjangoFilterBackend,)
