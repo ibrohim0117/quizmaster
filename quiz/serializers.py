@@ -20,9 +20,12 @@ class QuizSerializer(ModelSerializer):
 
 
 class QuestionSerializer(ModelSerializer):
+    question_name = serializers.CharField(source='question', read_only=True)
+    quiz_name = serializers.CharField(source='quiz.name', read_only=True)
+    
     class Meta:
         model = Question
-        fields = ['id', 'question', 'quiz', 'options']
+        fields = ['id', 'question', 'question_name', 'quiz', 'quiz_name', 'options']
 
 
 class OptionSerializer(ModelSerializer):
