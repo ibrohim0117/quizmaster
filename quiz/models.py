@@ -32,6 +32,7 @@ class Quiz(BaseCreatedModel):
     description = models.TextField(blank=True, null=True)
     degree = models.CharField(max_length=5, choices=DegreeType.choices, default=DegreeType.EASY)
     science = models.ForeignKey(Science, on_delete=models.CASCADE, related_name='quizzes')
+    teacher = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='quizzes', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Testlar/Mavzular'

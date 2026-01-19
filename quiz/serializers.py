@@ -14,10 +14,11 @@ class QuizSerializer(ModelSerializer):
     """Test/Mavzu serializer - Test va Mavzular birlashtirilgan"""
     science_name = serializers.CharField(source='science.name', read_only=True)
     count_questions = serializers.IntegerField(read_only=True)
+    teacher = serializers.PrimaryKeyRelatedField(read_only=True)
     
     class Meta:
         model = Quiz
-        fields = ['id', 'name', 'degree', 'science', 'science_name', 'description', 'count_questions']
+        fields = ['id', 'name', 'degree', 'science', 'science_name', 'description', 'count_questions', 'teacher']
 
 
 class QuestionSerializer(ModelSerializer):
