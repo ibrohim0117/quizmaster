@@ -70,8 +70,9 @@ class User(AbstractUser):
 
     class RolesTypes(models.TextChoices):
         ADMIN = '1', 'Administrator'
-        USERS = '2', 'Users'
+        USERS = '2', 'Users'  # Student = Users
         SUPPORT = '3', 'Support'
+        TEACHER = '4', 'Teacher'
 
     username = models.CharField(max_length=150, blank=True, null=True, unique=False)
     email = models.EmailField(unique=True)

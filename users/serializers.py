@@ -8,7 +8,11 @@ from users.models import User
 
 class UserCreateSerializer(ModelSerializer):
     levels = serializers.CharField(read_only=True)
-    roles = serializers.CharField(read_only=True)
+    roles = serializers.ChoiceField(
+        choices=User.RolesTypes.choices,
+        default=User.RolesTypes.USERS,
+        required=False
+    )
     password = serializers.CharField(write_only=True, min_length=8)
 
     class Meta:
@@ -19,15 +23,27 @@ class UserCreateSerializer(ModelSerializer):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Bu email allaqachon ro'yxatdan o'tgan")
         return value
+    
+    def validate_roles(self, value):
+        # Faqat TEACHER yoki USERS (STUDENT) tanlash mumkin
+        allowed_roles = [User.RolesTypes.TEACHER, User.RolesTypes.USERS]
+        if value not in allowed_roles:
+            raise serializers.ValidationError(
+                f"Faqat 'TEACHER' yoki 'USERS' (Student) rolini tanlash mumkin. "
+                f"Siz '{value}' tanladingiz."
+            )
+        return value
 
     def create(self, validated_data):
         email = validated_data.get('email')
         password = validated_data.get('password')
+        role = validated_data.get('roles', User.RolesTypes.USERS)
         
         user = User.objects.create_user(
             email=email,
             password=password,
-            username=email  # username ni email bilan to'ldiramiz
+            username=email,  # username ni email bilan to'ldiramiz
+            roles=role
         )
         user.create_code()
         return user
